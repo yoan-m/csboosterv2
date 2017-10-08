@@ -4,6 +4,10 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { HomePage } from '../pages/home/home';
+import {MaterielPage} from '../pages/materiel/materiel';
+import {InventairePage} from '../pages/inventaire/inventaire';
+import {GestionPage} from '../pages/gestion/gestion';
+import {ProfilPage} from '../pages/profil/profil';
 import { AuthProvider } from '../providers/auth/auth';
 
 
@@ -29,7 +33,12 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    MaterielPage,
+    InventairePage,
+    GestionPage,
+    ProfilPage
+
   ],
   imports: [
     BrowserModule,
@@ -41,12 +50,16 @@ export const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    MaterielPage,
+    InventairePage,
+    GestionPage,
+    ProfilPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}, 
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider
   ]
 })

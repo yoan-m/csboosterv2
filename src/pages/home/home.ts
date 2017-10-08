@@ -13,9 +13,6 @@ export interface Todo {
   description: string;
   completed: boolean;
 }
-@IonicPage({
-  name: 'HomePage'
-})
 @Component({
   selector: 'HomePage',
   templateUrl: 'home.html'
