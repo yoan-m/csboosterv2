@@ -18,6 +18,11 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { UserProvider } from '../providers/user/user';
+import { CsProvider } from '../providers/cs/cs';
+import { SdisProvider } from '../providers/sdis/sdis';
+import { MaterielProvider } from '../providers/materiel/materiel';
+import { InventaireProvider } from '../providers/inventaire/inventaire';
 
 
 
@@ -60,7 +65,12 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    AuthProvider,
+    UserProvider,
+    CsProvider,
+    SdisProvider,
+    MaterielProvider,
+    InventaireProvider
   ]
 })
 export class AppModule {}

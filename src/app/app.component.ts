@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Platform, Nav, Menu} from 'ionic-angular';
+import {Platform, Nav} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 
@@ -10,6 +10,10 @@ import {MaterielPage} from '../pages/materiel/materiel';
 import {InventairePage} from '../pages/inventaire/inventaire';
 import {GestionPage} from '../pages/gestion/gestion';
 import {ProfilPage} from '../pages/profil/profil';
+import {UserProvider} from '../providers/user/user';
+
+
+import {User} from '../models/user.interface';
 
 @Component({
   templateUrl: 'app.html'
@@ -21,7 +25,10 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, afAuth: AngularFireAuth) {
+  user$: Observable;
+
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
+              afAuth: AngularFireAuth, public userProvider: UserProvider) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -33,16 +40,18 @@ export class MyApp {
       {title: 'Inventaires', component: InventairePage}
     ];
 
+    const authObserver = afAuth.authState.subscribe(u => {
 
-    const authObserver = afAuth.authState.subscribe(user => {
+      if (u) {
+        this.user$ = this.userProvider.getUser(user.uid);
 
-      /*if (user) {
+        userObservable.subscribe(us => this.user = us);
        this.rootPage = HomePage;
        authObserver.unsubscribe();
        } else {
        this.rootPage = 'LoginPage';
        authObserver.unsubscribe();
-       }*/
+       }
     });
   }
 
@@ -60,4 +69,6 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
 }
+

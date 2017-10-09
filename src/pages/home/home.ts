@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import {
   AngularFirestore,
   AngularFirestoreCollection
@@ -21,13 +21,13 @@ export class HomePage {
 
   todoCollectionRef: AngularFirestoreCollection<Todo>;
   todo$: Observable<Todo[]>;
-  
+
   constructor(public navCtrl: NavController, private afs: AngularFirestore, private auth: AuthProvider) {
 		this.todoCollectionRef = this.afs.collection<Todo>('cs');
 		this.todo$ = this.todoCollectionRef.valueChanges();
 
   }
-  
+
   logout(){
 	this.auth.logoutUser();
   }
