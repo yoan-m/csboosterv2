@@ -14,6 +14,8 @@ import {UserProvider} from '../providers/user/user';
 
 
 import {User} from '../models/user.interface';
+import {FirebaseListObservable} from "angularfire2/database-deprecated";
+import {Observable} from "rxjs";
 
 @Component({
   templateUrl: 'app.html'
@@ -25,7 +27,8 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  user$: Observable;
+
+  private item:Observable<User>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
               afAuth: AngularFireAuth, public userProvider: UserProvider) {
@@ -40,12 +43,13 @@ export class MyApp {
       {title: 'Inventaires', component: InventairePage}
     ];
 
-    const authObserver = afAuth.authState.subscribe(u => {
+    const authObserver = afAuth.authState.subscribe(user => {
 
-      if (u) {
-        this.user$ = this.userProvider.getUser(user.uid);
-
-        userObservable.subscribe(us => this.user = us);
+      if (user) {
+        this.item = this.userProvider.getUser(user.uid);
+        /*p.subscribe(
+          us => this.item = us
+        );*/
        this.rootPage = HomePage;
        authObserver.unsubscribe();
        } else {

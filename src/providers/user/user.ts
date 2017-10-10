@@ -5,6 +5,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import {User} from '../../models/user.interface';
+import {FirebaseListObservable} from "angularfire2/database-deprecated";
 /*
   Generated class for the UserProvider provider.
 
@@ -24,7 +25,7 @@ export class UserProvider {
   constructor(private afs: AngularFirestore) {
   }
 
-  getUser(userId: string){
+  getUser(userId: string):Observable<User>{
     this.userDoc = this.afs.doc<User>('user/'+userId);
     return  this.userDoc.valueChanges();
   }
