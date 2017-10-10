@@ -19,7 +19,7 @@
 <ion-content padding>
   <h2>Welcome to Ionic!</h2>
   <ion-list>
-  <ion-item *ngFor="let todo of todo$ | async"
+  <ion-item *ngFor="let todo of (userProvider | async)?.cs "
       [class.completed]="todo.completed">
     {{todo.nom}}
   </ion-item>
