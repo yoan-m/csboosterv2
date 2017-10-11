@@ -5,8 +5,9 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import {User} from '../../models/user.interface';
-import {FirebaseListObservable} from "angularfire2/database-deprecated";
+import {DocumentSnapshot} from "firebase/firestore";
 import {CS} from "../../models/user.interface";
+
 /*
   Generated class for the UserProvider provider.
 
@@ -22,7 +23,7 @@ export class UserProvider {
 
   private userDoc: AngularFirestoreDocument<User>;
   user:Observable<User>;
-  cs: Observable<CS[]>;
+  cs: Promise<DocumentSnapshot>[];
 
   constructor(private afs: AngularFirestore) {
   }
@@ -32,7 +33,18 @@ export class UserProvider {
 
     this.user = this.userDoc.valueChanges();
     this.user.subscribe(css => {
-        this.cs = css.cs;
+      console.log(css);
+      this.cs = [];
+      for (let entry of css.cs) {
+
+        this.cs.push(entry.get());
+      }
+      Promise.all(this.cs).then(value=> {
+        for (let entry of value) {
+console.log(entry.data().nom);
+        }
+      });
+
       }
     );
     return this.user;

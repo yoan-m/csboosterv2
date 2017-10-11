@@ -14,7 +14,6 @@ import {UserProvider} from '../providers/user/user';
 
 
 import {User} from '../models/user.interface';
-import {FirebaseListObservable} from "angularfire2/database-deprecated";
 import {Observable} from "rxjs";
 import {CS} from "../models/user.interface";
 
