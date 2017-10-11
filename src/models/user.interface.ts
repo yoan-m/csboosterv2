@@ -1,4 +1,3 @@
-
 import {DocumentReference} from "firebase/firestore";
 import { AngularFirestoreDocument } from 'angularfire2/firestore';
 /**
@@ -8,6 +7,8 @@ export interface User {
   n: string;
   p: string;
   a: boolean;
+  centre: CS;
+  centres: CS[];
   cs:DocumentReference[];
 }
 

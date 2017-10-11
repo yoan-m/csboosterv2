@@ -25,15 +25,14 @@ import { MaterielProvider } from '../providers/materiel/materiel';
 import { InventaireProvider } from '../providers/inventaire/inventaire';
 
 
-
 export const firebaseConfig = {
-    apiKey: "AIzaSyA5ouGZK0mMXNCJu2DjIc3-72L-xGqebdk",
-    authDomain: "csbooster-dc227.firebaseapp.com",
-    databaseURL: "https://csbooster-dc227.firebaseio.com",
-    projectId: "csbooster-dc227",
-    storageBucket: "csbooster-dc227.appspot.com",
-    messagingSenderId: "921974877593"
-  };
+  apiKey: "AIzaSyA5ouGZK0mMXNCJu2DjIc3-72L-xGqebdk",
+  authDomain: "csbooster-dc227.firebaseapp.com",
+  databaseURL: "https://csbooster-dc227.firebaseio.com",
+  projectId: "csbooster-dc227",
+  storageBucket: "csbooster-dc227.appspot.com",
+  messagingSenderId: "921974877593"
+};
 
 @NgModule({
   declarations: [
@@ -73,4 +72,5 @@ export const firebaseConfig = {
     InventaireProvider
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

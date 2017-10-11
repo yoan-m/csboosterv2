@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Platform, Nav} from 'ionic-angular';
+import {Platform, Nav, AlertController } from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 
@@ -22,16 +22,16 @@ import {CS} from "../models/user.interface";
 })
 export class MyApp {
 
-  @ViewChild(Nav) nav: Nav;
-  rootPage: any = HomePage;
+  @ViewChild(Nav) nav:Nav;
+  rootPage:any = HomePage;
 
-  pages: Array<{title: string, component: any}>;
+  pages:Array<{title: string, component: any}>;
 
 
   private item:Observable<User>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-              afAuth: AngularFireAuth, public userProvider: UserProvider) {
+  constructor(public platform:Platform, public statusBar:StatusBar, public splashScreen:SplashScreen,
+              afAuth:AngularFireAuth, public userProvider:UserProvider) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -46,24 +46,19 @@ export class MyApp {
     const authObserver = afAuth.authState.subscribe(user => {
 
       if (user) {
-        this.item = this.userProvider.getUser(user.uid);
-        this.item.subscribe(us => {
-            console.log(us);
-            this.rootPage = HomePage;
-          /*this.userProvider.cs.subscribe(cs => {
-              console.log(cs);
-            }
-          );*/
-            authObserver.unsubscribe();
-          }
-        );
 
-       } else {
-       this.rootPage = 'LoginPage';
-       authObserver.unsubscribe();
-       }
+          this.rootPage = 'LoginPage';
+          authObserver.unsubscribe();
+
+
+
+      } else {
+        this.rootPage = 'LoginPage';
+        authObserver.unsubscribe();
+      }
     });
   }
+
 
   initializeApp() {
     this.platform.ready().then(() => {
