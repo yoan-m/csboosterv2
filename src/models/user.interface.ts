@@ -16,4 +16,30 @@ export interface User {
 export interface CS {
   nom: string;
   sdis:string;
+  id: string;
+  materiels:Materiel[];
+  inventaires:Inventaire[];
+}
+
+
+export interface Materiel {
+  l: string;
+  id: string;
+  storages: Storage[];
+}
+
+export interface Storage {
+  l: string;
+  id: string;
+  items: Item[];
+}
+
+export interface Item {
+  l: string;
+  id: string;
+}
+
+export interface Inventaire {
+  l: string;
+  id: string;
 }

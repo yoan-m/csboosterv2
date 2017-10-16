@@ -12,6 +12,7 @@ import {UserProvider} from '../../providers/user/user';
 import { EmailValidator } from '../../validators/email';
 
 import { HomePage } from '../home/home';
+import {CsProvider} from "../../providers/cs/cs";
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -24,7 +25,8 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, public authData: AuthProvider,
               public formBuilder: FormBuilder, public alertCtrl: AlertController,
-              public loadingCtrl: LoadingController, public userProvider:UserProvider) {
+              public loadingCtrl: LoadingController, public userProvider:UserProvider
+    , public csProvider:CsProvider) {
 
     this.loginForm = formBuilder.group({
       email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
@@ -33,20 +35,25 @@ export class LoginPage {
   }
 
   loginUser(){
-    if (!this.loginForm.valid){
-      console.log(this.loginForm.value);
+    if (false && !this.loginForm.valid){
+      //console.log(this.loginForm.value);
     } else {
-      this.authData.loginUser(this.loginForm.value.email, this.loginForm.value.password)
+      //this.authData.loginUser(this.loginForm.value.email, this.loginForm.value.password)
+      this.authData.loginUser('yoan.murciano@gmail.com', 'thunder')
         .then( authData => {
 
-          this.userProvider.getUser(authData.uid).subscribe(us => {
-              console.log(us);
+          const csObserver = this.userProvider.getUser(authData.uid).subscribe(us => {
+              csObserver.unsubscribe();
               this.userProvider.cs.then(centres => {
                   console.log(centres);
                   if(centres.length == 1){
+                    this.csProvider.getCS(centres[0].id);
+                    this.csProvider.csId = centres[0].id;
                     this.navCtrl.setRoot(HomePage);
                   } if(centres.length > 1){
                     this.showCentres(centres);
+
+
                   }
                 }
               );
@@ -105,7 +112,9 @@ export class LoginPage {
         {
           text: "Valider",
           handler: data => {
+            this.csProvider.getCS(data);
 
+            this.csProvider.csId = data;
             this.navCtrl.setRoot(HomePage);
           }
         }]});

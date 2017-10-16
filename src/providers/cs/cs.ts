@@ -1,18 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
-
+import {AngularFirestoreDocument, AngularFirestore, AngularFirestoreCollection} from "angularfire2/firestore";
+import {Observable} from "rxjs";
+import {CS, Materiel} from "../../models/user.interface";
 /*
-  Generated class for the CsProvider provider.
+ Generated class for the CsProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+ See https://angular.io/guide/dependency-injection for more info on providers
+ and Angular DI.
+ */
 @Injectable()
 export class CsProvider {
 
-  constructor(public http: Http) {
-    console.log('Hello CsProvider Provider');
+
+  public csDoc: AngularFirestoreDocument<CS>;
+  public cs:Observable<CS>;
+public csId:string;
+
+  private materielsCollection: AngularFirestoreCollection<Materiel>;
+  public materiels: Observable<Materiel[]>;
+
+  constructor(private afs: AngularFirestore) {
+  }
+
+
+  getCS(csId: string):Observable<CS> {
+    this.csDoc = this.afs.doc<CS>('cs/' + csId);
+    this.cs = this.csDoc.valueChanges();
+    this.materielsCollection = this.csDoc.collection<Materiel>('materiels');
+    this.materiels = this.materielsCollection.valueChanges();
+    return this.cs;
   }
 
 }

@@ -6,15 +6,8 @@ import { Observable } from 'rxjs/Observable';
 
 import {User} from '../../models/user.interface';
 import {DocumentSnapshot} from "firebase/firestore";
-import {CS} from "../../models/user.interface";
-import * as _ from "lodash";
+import {CsProvider} from "../cs/cs";
 
-/*
- Generated class for the UserProvider provider.
-
- See https://angular.io/guide/dependency-injection for more info on providers
- and Angular DI.
- */
 
 
 
@@ -27,7 +20,7 @@ export class UserProvider {
   cs: Promise<any[]>;
   currentUser: User;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private csProvider: CsProvider) {
   }
 
   getUser(userId: string):Observable<User>{
@@ -52,6 +45,7 @@ export class UserProvider {
           }
           if(this.currentUser.centres.length == 1){
             this.currentUser.centre = this.currentUser.centres[0];
+            this.csProvider.getCS(this.currentUser.centre.id);
           }
           return this.currentUser.centres;
         });
