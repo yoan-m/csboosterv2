@@ -4,13 +4,37 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Véhicules</ion-title>
+    <ion-buttons end>
+      <button *ngIf="materiel == null;" (click)="newMateriel()"  ion-button icon-only color="royal">
+        <ion-icon name="person-add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-list inset>
-    <button ion-item (click)="selectMateriel(materiel)" *ngFor="let materiel of (materiels)" >
-      {{materiel.l}}
-    </button>
-  </ion-list>
+  <div *ngIf="materiel == null; else elseBlock">
+    <ion-list inset>
+      <button ion-item (click)="selectMateriel(materiel)" *ngFor="let materiel of (materiels)" >
+        {{materiel.l}}
+      </button>
+    </ion-list>
+  </div>
+  <ng-template #elseBlock>
+    <div class="container">
+      <h1>Hero Form</h1>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" [(ngModel)]="materiel.l" name="label" required>
+        </div>
+
+        <div class="form-group">
+          <label for="alterEgo">Alter Ego</label>
+          <input type="text" class="form-control" id="alterEgo">
+        </div>
+
+      <button class="btn btn-primary" (click)="save()">Enregistrer</button>
+      <button class="btn btn-primary" (click)="delete()">Supprimer</button>
+    </div>
+  </ng-template>
 </ion-content>

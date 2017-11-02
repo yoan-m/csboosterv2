@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {CsProvider} from "../../providers/cs/cs";
-import {Materiel} from "../../models/user.interface";
+import {Materiel, MaterielId} from "../../models/user.interface";
 import {MaterielProvider} from "../../providers/materiel/materiel";
 
 /**
@@ -18,6 +18,7 @@ import {MaterielProvider} from "../../providers/materiel/materiel";
 export class MaterielPage {
 
   public materiels:Materiel[];
+  public materiel:MaterielId;
   constructor(public navCtrl: NavController, public navParams: NavParams, public csProvider:CsProvider, public materielProvider:MaterielProvider) {
   }
 
@@ -30,9 +31,41 @@ export class MaterielPage {
 
   public selectMateriel(materiel){
     console.log(materiel);
+    this.materiel = materiel;
     this.materielProvider.getMateriel(this.csProvider.csId, materiel.id).subscribe(us => {
         console.log(us);
+      this.materielProvider.getStorage(this.csProvider.csId, materiel.id).subscribe(st => {
+        console.log(st);
+      });
     });
+  }
+
+  public save(){
+    console.log(this.materiel);
+    if(this.materiel.id == ''){
+      this.materielProvider.addMateriel(this.materiel);
+    }else{
+      this.materielProvider.updateMateriel(this.materiel);
+    }
+    this.materiel = null;
+  }
+
+  public delete(){
+    console.log(this.materiel);
+    if(this.materiel.id == ''){
+      //this.materielProvider.addMateriel(this.materiel);
+    }else{
+      this.materielProvider.deleteMateriel();
+    }
+    this.materiel = null;
+  }
+
+  public newMateriel(){
+    this.materiel = {
+      l: '',
+      id: '',
+      storages: []
+    };
   }
 
 }

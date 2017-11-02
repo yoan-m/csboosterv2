@@ -24,9 +24,10 @@ export interface CS {
 
 export interface Materiel {
   l: string;
-  id: string;
   storages: Storage[];
 }
+
+export interface MaterielId extends Materiel { id: string; }
 
 export interface Storage {
   l: string;
