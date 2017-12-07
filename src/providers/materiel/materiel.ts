@@ -3,7 +3,7 @@ import {AngularFirestoreDocument, AngularFirestoreCollection, AngularFirestore} 
 import {Materiel, Storage, CS} from "../../models/user.interface";
 import {Observable} from "rxjs";
 import {CsProvider} from "../cs/cs";
-
+import * as _ from 'lodash';
 /*
   Generated class for the MaterielProvider provider.
 
@@ -28,8 +28,10 @@ export class MaterielProvider {
 
 
   getStorage(csId: string,materielId: string):Observable<Storage[]> {
-    this.storagesCollection = this.materielDoc.collection<Storage>('storages');
-    this.storages = this.materielDoc.collection<Storage>('storages').valueChanges();
+    //this.storagesCollection = this.materielDoc.collection<Storage>('storages');
+    this.storagesCollection = this.csProvider.csDoc.collection('storages', ref => ref.where('m', '==', materielId));
+    //this.storages = this.materielDoc.collection<Storage>('storages').valueChanges();
+    this.storages = this.storagesCollection.valueChanges();
     return this.storages;
   }
 
@@ -44,12 +46,42 @@ export class MaterielProvider {
     this.materielDoc.update(materiel);
   }
 
-  addMateriel(materiel: any) {
-    this.csProvider.csDoc.collection<Materiel>('materiels').add(materiel);
+  addMateriel(materiel: Materiel) {
+    const id = this.afs.createId();
+    materiel.id = id;
+    this.csProvider.materielsCollection.doc(id).set(materiel);
+
   }
 
   deleteMateriel(){
     this.materielDoc.delete();
+  }
+
+  public addStorage(storage: Storage){
+    const id = this.afs.createId();
+    storage.id = id;
+    this.storagesCollection.doc(id).set(storage);
+    //this.csProvider.storagesCollection.doc(id).set(storage);
+  }
+  public updateStorage(storage){
+
+    this.storagesCollection.doc(storage.id).set(storage);
+  }
+  public removeStorage(storage: Storage){
+    this.storagesCollection.doc(storage.id).delete();
+  }
+
+  public addItem(s, i){
+    s.items.push(i);
+    this.storagesCollection.doc(s.id).set(s);
+  }
+  public updateItem(storage){
+
+    this.storagesCollection.doc(storage.id).set(storage);
+  }
+  public removeItem(storage, item){
+    _.pull(storage.items, item);
+    this.storagesCollection.doc(storage.id).set(storage);
   }
 
 }

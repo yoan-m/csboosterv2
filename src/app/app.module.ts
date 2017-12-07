@@ -24,6 +24,8 @@ import { SdisProvider } from '../providers/sdis/sdis';
 import { MaterielProvider } from '../providers/materiel/materiel';
 import { InventaireProvider } from '../providers/inventaire/inventaire';
 
+import { OrderModule } from 'ngx-order-pipe';
+
 
 export const firebaseConfig = {
   apiKey: "AIzaSyA5ouGZK0mMXNCJu2DjIc3-72L-xGqebdk",
@@ -49,7 +51,8 @@ export const firebaseConfig = {
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    OrderModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

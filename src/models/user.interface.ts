@@ -23,15 +23,19 @@ export interface CS {
 
 
 export interface Materiel {
+  id: string;
   l: string;
   storages: Storage[];
 }
+export interface MaterielId extends Materiel {
+  id: string;
+}
 
-export interface MaterielId extends Materiel { id: string; }
 
 export interface Storage {
   l: string;
   id: string;
+  m: string;
   items: Item[];
 }
 

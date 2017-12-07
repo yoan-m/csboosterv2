@@ -5,8 +5,11 @@
     </button>
     <ion-title>Véhicules</ion-title>
     <ion-buttons end>
-      <button *ngIf="materiel == null;" (click)="newMateriel()"  ion-button icon-only color="royal">
-        <ion-icon name="person-add"></ion-icon>
+      <button *ngIf="materiel == null;" (click)="newMateriel()" ion-button icon-only color="secondary">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+      <button *ngIf="materiel != null;" (click)="delete()" ion-button icon-only color="danger">
+        <ion-icon name="trash"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -15,26 +18,66 @@
 <ion-content padding>
   <div *ngIf="materiel == null; else elseBlock">
     <ion-list inset>
-      <button ion-item (click)="selectMateriel(materiel)" *ngFor="let materiel of (materiels)" >
+      <button ion-item (click)="selectMateriel(materiel)" *ngFor="let materiel of (csProvider.materiels) | async">
         {{materiel.l}}
       </button>
     </ion-list>
   </div>
   <ng-template #elseBlock>
-    <div class="container">
-      <h1>Hero Form</h1>
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" class="form-control" id="name" [(ngModel)]="materiel.l" name="label" required>
-        </div>
+    <ion-list>
 
-        <div class="form-group">
-          <label for="alterEgo">Alter Ego</label>
-          <input type="text" class="form-control" id="alterEgo">
-        </div>
+      <ion-item>
+        <ion-label fixed>Label</ion-label>
+        <ion-input type="text" id="name" [(ngModel)]="materiel.l" name="label" required></ion-input>
+      </ion-item>
 
-      <button class="btn btn-primary" (click)="save()">Enregistrer</button>
-      <button class="btn btn-primary" (click)="delete()">Supprimer</button>
+      <ion-item>
+        <ion-label fixed>Immatriculation</ion-label>
+        <ion-input type="text" id="immatriculation" [(ngModel)]="materiel.i" name="immatriculation"></ion-input>
+      </ion-item>
+
+    </ion-list>
+    <div padding>
+      <button ion-button color="primary" block (click)="save()">Enregistrer</button>
+      <button ion-button color="light" block (click)="cancel()">Annuler</button>
     </div>
+
+    <ion-toolbar color="light">
+      <ion-title>Inventaire</ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only color="secondary" (click)="addStorage(materiel)">
+          <ion-icon name="add-circle"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-list>
+      <ion-item-group *ngFor="let storage of (materielProvider.storages) | async | orderBy : ['l']">
+        <ion-item-divider color="light">
+          <h2>{{storage.l}}</h2>
+          <button ion-button item-end color="secondary" (click)="addItem(storage)">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+          <button item-end ion-button color="primary" (click)="updateStorage(storage)">
+            <ion-icon name="create"></ion-icon>
+          </button>
+          <button item-end ion-button color="primary" (click)="updateStorageInventaire(storage)">
+            <ion-icon name="list"></ion-icon>
+          </button>
+          <button item-end ion-button color="danger" (click)="removeStorage(storage)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-item-divider>
+
+        <ion-item *ngFor="let item of (storage.items) | orderBy : ['l']">
+          <h2>{{item.q + ' - ' +item.l}}</h2>
+          <button ion-button item-end color="danger" (click)="removeItem(storage, item)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+          <button item-end ion-button color="primary" (click)="updateItem(storage, item)">
+            <ion-icon name="create"></ion-icon>
+          </button>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
   </ng-template>
 </ion-content>
