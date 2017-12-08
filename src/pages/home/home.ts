@@ -7,29 +7,21 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { AuthProvider } from '../../providers/auth/auth';
+import {CsProvider} from "../../providers/cs/cs";
 
-
-export interface Todo {
-  description: string;
-  completed: boolean;
-}
 @Component({
   selector: 'HomePage',
   templateUrl: 'home.html'
 })
 export class HomePage {
 
-  todoCollectionRef: AngularFirestoreCollection<Todo>;
-  todo$: Observable<Todo[]>;
+  constructor(public csProvider:CsProvider, private auth: AuthProvider) {
 
-  constructor(public navCtrl: NavController, private afs: AngularFirestore, private auth: AuthProvider) {
-		this.todoCollectionRef = this.afs.collection<Todo>('cs');
-		this.todo$ = this.todoCollectionRef.valueChanges();
 
   }
 
   logout(){
-	this.auth.logoutUser();
+	  this.auth.logoutUser();
   }
 
 }

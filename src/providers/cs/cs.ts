@@ -4,7 +4,7 @@ import {
 } from "angularfire2/firestore";
 import {Observable} from "rxjs";
 import 'rxjs/add/operator/map';
-import {CS, Materiel, MaterielId, Storage} from "../../models/user.interface";
+import {CS, Materiel, MaterielId, Storage, Inventaire, Job} from "../../models/user.interface";
 /*
  Generated class for the CsProvider provider.
 
@@ -21,9 +21,12 @@ export class CsProvider {
 
   public materielsCollection: AngularFirestoreCollection<Materiel>;
   public storagesCollection: AngularFirestoreCollection<Storage>;
+  public inventairesCollection: AngularFirestoreCollection<Inventaire>;
 
-  //public materiels: Observable<MaterielId[]>;
+  public jobsCollection: AngularFirestoreCollection<Job>;
+
   public materiels: Observable<Materiel[]>;
+  public inventaires: Observable<Inventaire[]>;
 
   constructor(private afs: AngularFirestore) {
   }
@@ -34,15 +37,23 @@ export class CsProvider {
     this.cs = this.csDoc.valueChanges();
     this.materielsCollection = this.csDoc.collection<Materiel>('materiels');
     this.storagesCollection = this.csDoc.collection<Storage>('storages');
+    this.inventairesCollection = this.csDoc.collection<Inventaire>('inventaires');
     this.materiels = this.materielsCollection.valueChanges();
-    /*this.materiels = this.materielsCollection.snapshotChanges().map(actions => {
-      return actions.map(a => {
-        const data = a.payload.doc.data() as Materiel;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      });
-    });*/
+    this.inventaires = this.inventairesCollection.valueChanges();
     return this.cs;
+  }
+
+  public addInventaire(inventaire: Inventaire){
+    const id = this.afs.createId();
+    inventaire.id = id;
+    this.inventairesCollection.doc(id).set(inventaire);
+  }
+  public updateInventaire(inventaire){
+
+    this.inventairesCollection.doc(inventaire.id).set(inventaire);
+  }
+  public deleteInventaire(inventaire: Inventaire){
+    this.inventairesCollection.doc(inventaire.id).delete();
   }
 
 }

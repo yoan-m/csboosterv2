@@ -8,7 +8,6 @@ import {AngularFireAuth} from 'angularfire2/auth';
 import {HomePage} from '../pages/home/home';
 import {MaterielPage} from '../pages/materiel/materiel';
 import {InventairePage} from '../pages/inventaire/inventaire';
-import {GestionPage} from '../pages/gestion/gestion';
 import {ProfilPage} from '../pages/profil/profil';
 import {UserProvider} from '../providers/user/user';
 
@@ -37,9 +36,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       {title: 'Home', component: HomePage},
-      {title: 'Profil', component: ProfilPage},
+      //{title: 'Profil', component: ProfilPage},
       {title: 'Véhicules', component: MaterielPage},
-      {title: 'Gestion', component: GestionPage},
       {title: 'Inventaires', component: InventairePage}
     ];
 

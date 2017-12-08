@@ -23,7 +23,7 @@ export class MaterielPage {
 
   public materiel:Materiel;
   public materiels: Observable<MaterielId[]>;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public csProvider:CsProvider, public materielProvider:MaterielProvider, public alertCtrl: AlertController) {
+  constructor(public csProvider:CsProvider, public materielProvider:MaterielProvider, public alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -150,18 +150,19 @@ export class MaterielPage {
         }
       ]
     });
-    prompt.addInput({
-      type: 'radio',
-      label: 'Conducteur VSAV',
-      value: 'c',
-      checked: true
+
+    const inventairesObserver = this.csProvider.inventaires.subscribe(inventaires => {
+      inventairesObserver.unsubscribe();
+      for (let inventaire of inventaires) {
+        prompt.addInput({
+          type: 'radio',
+          label: inventaire.l,
+          value: inventaire.id,
+          checked: inventaire.id == storage.i
+        });
+      }
+      prompt.present();
     });
-    prompt.addInput({
-      type: 'radio',
-      label: 'Equipier VSAV',
-      value: 'e'
-    });
-    prompt.present();
   }
 
   public removeStorage(storage){

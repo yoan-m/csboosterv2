@@ -48,3 +48,9 @@ export interface Inventaire {
   l: string;
   id: string;
 }
+
+export interface Job {
+  l: string;
+  id: string;
+
+}

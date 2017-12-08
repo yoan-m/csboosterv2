@@ -6,7 +6,6 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {MaterielPage} from '../pages/materiel/materiel';
 import {InventairePage} from '../pages/inventaire/inventaire';
-import {GestionPage} from '../pages/gestion/gestion';
 import {ProfilPage} from '../pages/profil/profil';
 import { AuthProvider } from '../providers/auth/auth';
 
@@ -42,7 +41,6 @@ export const firebaseConfig = {
     HomePage,
     MaterielPage,
     InventairePage,
-    GestionPage,
     ProfilPage
 
   ],
@@ -60,7 +58,6 @@ export const firebaseConfig = {
     HomePage,
     MaterielPage,
     InventairePage,
-    GestionPage,
     ProfilPage
   ],
   providers: [
