@@ -15,7 +15,7 @@
 
 <ion-content padding>
   <ion-list inset>
-    <ion-item *ngFor="let inventaire of (csProvider.inventaires) | async | orderBy : ['l']">
+    <ion-item *ngFor="let inventaire of (inventaires) | async | orderBy : ['l']">
       <h2>
         {{inventaire.l}}
       </h2>

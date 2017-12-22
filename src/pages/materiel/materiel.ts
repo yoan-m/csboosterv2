@@ -27,7 +27,7 @@ export class MaterielPage {
   }
 
   ionViewDidLoad() {
-    //this.materiels = this.csProvider.materiels;
+   this.materiels = this.csProvider.materielsCollection.valueChanges();
   }
 
   public selectMateriel(materiel){

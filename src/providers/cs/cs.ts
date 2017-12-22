@@ -4,6 +4,9 @@ import {
 } from "angularfire2/firestore";
 import {Observable} from "rxjs";
 import 'rxjs/add/operator/map';
+import { ToastController } from 'ionic-angular';
+
+import * as firebase from 'firebase';
 import {CS, Materiel, MaterielId, Storage, Inventaire, Job} from "../../models/user.interface";
 /*
  Generated class for the CsProvider provider.
@@ -28,18 +31,30 @@ export class CsProvider {
   public materiels: Observable<Materiel[]>;
   public inventaires: Observable<Inventaire[]>;
 
-  constructor(private afs: AngularFirestore) {
+  public materielsData: {};
+
+  constructor(private afs: AngularFirestore, public toastCtrl: ToastController) {
   }
 
 
   getCS(csId: string):Observable<CS> {
     this.csDoc = this.afs.doc<CS>('cs/' + csId);
     this.cs = this.csDoc.valueChanges();
+    this.materielsData = {};
     this.materielsCollection = this.csDoc.collection<Materiel>('materiels');
     this.storagesCollection = this.csDoc.collection<Storage>('storages');
     this.inventairesCollection = this.csDoc.collection<Inventaire>('inventaires');
+    this.jobsCollection = this.csDoc.collection<Job>('jobs');
     this.materiels = this.materielsCollection.valueChanges();
     this.inventaires = this.inventairesCollection.valueChanges();
+
+    this.materiels.subscribe(mats => {
+      console.log(mats);
+      for(let mat of mats){
+        this.materielsData[mat.id]=mat;
+      }
+      return mats;
+    });
     return this.cs;
   }
 
@@ -54,6 +69,42 @@ export class CsProvider {
   }
   public deleteInventaire(inventaire: Inventaire){
     this.inventairesCollection.doc(inventaire.id).delete();
+  }
+
+  private inventaireCollection: AngularFirestoreCollection<Storage>;
+  public getInventaire(inventaireId: string): AngularFirestoreCollection<Storage> {
+    this.inventaireCollection = this.csDoc.collection('storages', ref => ref.where('i', '==', inventaireId));
+    return this.inventaireCollection;
+  }
+
+
+  public jobCollection: AngularFirestoreCollection<Job>;
+  public getLastJob(inventaireId: string): Observable<Job[]> {
+    this.jobCollection = this.csDoc.collection('jobs', ref => ref.where('i', '==', inventaireId).where('c', '==', false).limit(1).orderBy('t', 'desc'));
+    return this.jobCollection.valueChanges();
+  }
+
+  public addJob(job){
+    const id = this.afs.createId();
+    job.id = id;
+    job.t = firebase.firestore.FieldValue.serverTimestamp();
+    this.jobsCollection.doc(id).set(job);
+    let toast = this.toastCtrl.create({
+      message: 'Travail enregistré',
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+  public updateJob(job){
+
+    this.jobsCollection.doc(job.id).set(job);
+    let toast = this.toastCtrl.create({
+      message: 'Travail terminé',
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
   }
 
 }

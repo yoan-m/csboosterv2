@@ -18,7 +18,7 @@
 <ion-content padding>
   <div *ngIf="materiel == null; else elseBlock">
     <ion-list inset>
-      <button ion-item (click)="selectMateriel(materiel)" *ngFor="let materiel of (csProvider.materiels) | async">
+      <button ion-item (click)="selectMateriel(materiel)" *ngFor="let materiel of (materiels) | async">
         {{materiel.l}}
       </button>
     </ion-list>

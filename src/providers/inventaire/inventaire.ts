@@ -15,4 +15,6 @@ export class InventaireProvider {
     console.log('Hello InventaireProvider Provider');
   }
 
+
+
 }

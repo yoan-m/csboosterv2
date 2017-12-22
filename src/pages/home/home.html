@@ -4,9 +4,64 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{(csProvider.cs | async)?.nom + ' ('+(csProvider.cs | async)?.sdis + ')' }}</ion-title>
+
+    <ion-buttons end *ngIf="inventaire == null;">
+      <button (click)="archive()" ion-button icon-only>
+        <ion-icon name="archive"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <div *ngIf="inventaire == null; else elseBlock">
+  <ion-list inset>
+    <ion-item-sliding *ngFor="let inventaire of (csProvider.inventaires) | async | orderBy : ['l']">
+      <ion-item (click)="addJob(inventaire)">
+        <h2>
+          {{inventaire.l}}
+        </h2>
+      </ion-item>
+      </ion-item-sliding>
+  </ion-list>
+</div>
+  <ng-template #elseBlock>
+  <ion-list inset>
+    <div *ngFor="let i of (inventaire.j)">
+    <ion-list-header>
+      {{i.l}}
+    </ion-list-header>
+      <ion-item-group *ngFor="let s of (i.s)">
+      <ion-item-divider color="light">{{s.l}}</ion-item-divider>
+      <ion-item *ngFor="let i of (s.items)">
+        <h2>{{i.l}}</h2>
+        <p>{{(i.n ? i.n : 0) + ' / ' + i.q}}</p>
+        <button ion-button item-end color="danger" (click)="removeItem(i)">
+          <ion-icon name="add-circle"></ion-icon>
+        </button>
+        <button item-end ion-button color="primary" (click)="setItem(i)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+        <button item-end ion-button color="secondary" (click)="addItem(i)">
+          <ion-icon name="list"></ion-icon>
+        </button>
+      </ion-item>
+    </ion-item-group>
+      </div>
+  </ion-list>
 
+  <ion-footer>
+    <ion-toolbar>
+        <button color="danger" full (click)="inventaire=null" ion-button>
+          Annuler
+        </button>
+        <button color="primary" (click)="saveJob(inventaire)" full ion-button>
+          Enregistrer
+        </button>
+        <button color="secondary" (click)="endJob(inventaire)" full ion-button>
+          Terminer
+        </button>
+    </ion-toolbar>
+  </ion-footer>
+    </ng-template>
 </ion-content>

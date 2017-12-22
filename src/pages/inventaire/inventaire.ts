@@ -22,7 +22,9 @@ export class InventairePage {
   public inventaires: Observable<Inventaire[]>;
   constructor(public csProvider:CsProvider, public alertCtrl: AlertController) {
   }
-
+  ionViewDidLoad() {
+    this.inventaires = this.csProvider.inventairesCollection.valueChanges();
+  }
 
   public addInventaire(){
     let prompt = this.alertCtrl.create({
