@@ -4,6 +4,8 @@ import {Materiel, Storage, CS} from "../../models/user.interface";
 import {Observable} from "rxjs";
 import {CsProvider} from "../cs/cs";
 import * as _ from 'lodash';
+import {UserProvider} from "../user/user";
+import * as firebase from 'firebase';
 /*
   Generated class for the MaterielProvider provider.
 
@@ -23,14 +25,12 @@ export class MaterielProvider {
   private storagesCollection: AngularFirestoreCollection<Storage>;
   public storages: Observable<Storage[]>;
 
-  constructor(private afs: AngularFirestore, private csProvider: CsProvider) {
+  constructor(private afs: AngularFirestore, private csProvider: CsProvider, private userProvider: UserProvider) {
   }
 
 
-  getStorage(csId: string,materielId: string):Observable<Storage[]> {
-    //this.storagesCollection = this.materielDoc.collection<Storage>('storages');
+  getStorage(materielId: string):Observable<Storage[]> {
     this.storagesCollection = this.csProvider.csDoc.collection('storages', ref => ref.where('m', '==', materielId));
-    //this.storages = this.materielDoc.collection<Storage>('storages').valueChanges();
     this.storages = this.storagesCollection.valueChanges();
     return this.storages;
   }
@@ -57,6 +57,17 @@ export class MaterielProvider {
     this.materielDoc.delete();
   }
 
+  public logInventaire(materielId, inventaireId){
+    this.csProvider.materielsCollection.doc(materielId).collection('inventaires').doc(inventaireId).set({
+      u:this.userProvider.currentUser.n,
+      t: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }
+
+  public getLogInventaire(materielId, inventaireId) {
+    return this.csProvider.materielsCollection.doc(materielId).collection('inventaires').doc(inventaireId).valueChanges();
+  }
+
   public addStorage(storage: Storage){
     const id = this.afs.createId();
     storage.id = id;
@@ -67,6 +78,12 @@ export class MaterielProvider {
 
     this.storagesCollection.doc(storage.id).set(storage);
   }
+
+  public updateStorageDoc(storage){
+    this.csProvider.csDoc.collection('storages').doc(storage.id).set(storage);
+  }
+
+
   public removeStorage(storage: Storage){
     this.storagesCollection.doc(storage.id).delete();
   }

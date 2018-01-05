@@ -36,7 +36,7 @@ export class MaterielPage {
         console.log(us);
       materielObserver.unsubscribe();
       this.materiel = us;
-      this.materielProvider.getStorage(this.csProvider.csId, materiel.id).subscribe(st => {
+      this.materielProvider.getStorage(materiel.id).subscribe(st => {
         console.log(st);
       });
     });
