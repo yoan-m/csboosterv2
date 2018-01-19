@@ -8,7 +8,7 @@
       <ion-icon name="undo"></ion-icon>
     </button>
     </ion-buttons>
-    <ion-title>{{(csProvider.cs | async)?.nom + ' ('+(csProvider.cs | async)?.sdis + ')' }}</ion-title>
+    <ion-title>{{title}}</ion-title>
 
     <ion-buttons end >
       <button *ngIf="vehicule != null;" (click)="saveVehicule()"  color="secondary" ion-button icon-only>
@@ -21,7 +21,7 @@
 <ion-content>
   <div *ngIf="inventaire == null; else vehiculesBlock">
   <ion-list inset>
-      <ion-item  *ngFor="let inventaire of (csProvider.inventaires) | async | orderBy : ['l']" (click)="selectInventaire(inventaire)">
+      <ion-item  *ngFor="let inventaire of (inventaires) | async | orderBy : ['l']" (click)="selectInventaire(inventaire)">
         <h2>
           {{inventaire.l}}
         </h2>
@@ -33,27 +33,24 @@
     <ion-list inset>
         <ion-item [ngClass]="isVehiculeDone(i)" *ngFor="let i of (inventaire.j)" (click)="selectVehicule(i)">
           <h2>{{i.l}}</h2>
-          <p>{{(i.log | async)?.u + ' ' +((i.log | async)?.t | date: 'dd/MM/yyyy')}}</p>
+          <p>{{(i.log | async)?.u + ' ' +((i.log | async)?.t | date: 'dd/MM/yyyy HH:mm:ss')}}</p>
         </ion-item>
     </ion-list>
   </div>
   <ng-template #inventaireBlock>
   <ion-list>
-    <ion-toolbar>
-      <ion-title>{{vehicule.l}}</ion-title>
-      </ion-toolbar>
       <ion-item-group *ngFor="let s of (vehicule.s)">
       <ion-item-divider color="light">{{s.l}}</ion-item-divider>
       <ion-item *ngFor="let i of (s.items)">
         <h2>{{i.l}}</h2>
         <p>{{(i.n ? i.n : 0) + ' / ' + i.q}}</p>
-        <button ion-button item-end  icon-only color="danger" (click)="removeItem(i)">
+        <button ion-button item-end  icon-only color="danger" class="inventaire" style="height: 50px; width: 50px;" (click)="removeItem(i)">
           <ion-icon name="remove-circle"></ion-icon>
         </button>
-        <button item-end ion-button  icon-only color="primary" (click)="setItem(i)">
+        <button item-end ion-button  icon-only color="primary" class="inventaire" style="height: 50px; width: 50px;" (click)="setItem(i)">
           <ion-icon name="checkmark-circle"></ion-icon>
         </button>
-        <button item-end ion-button  icon-only color="secondary" (click)="addItem(i)">
+        <button item-end ion-button  icon-only color="secondary" class="inventaire" style="height: 50px; width: 50px;" (click)="addItem(i)">
           <ion-icon name="add-circle"></ion-icon>
         </button>
       </ion-item>

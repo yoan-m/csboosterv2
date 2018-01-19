@@ -45,15 +45,12 @@ export class LoginPage {
           const csObserver = this.userProvider.getUser(authData.uid).subscribe(us => {
               csObserver.unsubscribe();
               this.userProvider.cs.then(centres => {
-                  console.log(centres);
                   if(centres.length == 1){
                     this.csProvider.getCS(centres[0].id);
                     this.csProvider.csId = centres[0].id;
                     this.navCtrl.setRoot(HomePage);
                   } if(centres.length > 1){
                     this.showCentres(centres);
-
-
                   }
                 }
               );
@@ -112,10 +109,12 @@ export class LoginPage {
         {
           text: "Valider",
           handler: data => {
-            this.csProvider.getCS(data);
+            this.csProvider.getCS(data).valueChanges().subscribe(cs=>{
 
-            this.csProvider.csId = data;
-            this.navCtrl.setRoot(HomePage);
+              this.csProvider.csId = data;
+              this.navCtrl.setRoot(HomePage);
+            });
+
           }
         }]});
     prompt.present();

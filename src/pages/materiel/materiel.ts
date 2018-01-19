@@ -6,6 +6,7 @@ import {Materiel} from "../../models/user.interface";
 import {Observable} from "rxjs";
 import {MaterielProvider} from "../../providers/materiel/materiel";
 import {MaterielId} from "../../models/user.interface";
+import {Inventaire} from "../../models/user.interface";
 
 
 /**
@@ -151,7 +152,7 @@ export class MaterielPage {
       ]
     });
 
-    const inventairesObserver = this.csProvider.inventaires.subscribe(inventaires => {
+    const inventairesObserver = this.csProvider.csDoc.collection<Inventaire>('inventaires').valueChanges().subscribe(inventaires => {
       inventairesObserver.unsubscribe();
       for (let inventaire of inventaires) {
         prompt.addInput({

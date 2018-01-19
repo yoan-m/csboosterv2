@@ -18,12 +18,12 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UserProvider } from '../providers/user/user';
-import { CsProvider } from '../providers/cs/cs';
 import { SdisProvider } from '../providers/sdis/sdis';
 import { MaterielProvider } from '../providers/materiel/materiel';
 import { InventaireProvider } from '../providers/inventaire/inventaire';
 
 import { OrderModule } from 'ngx-order-pipe';
+import {LoginPage} from "../pages/login/login";
 
 
 export const firebaseConfig = {
@@ -41,7 +41,8 @@ export const firebaseConfig = {
     HomePage,
     MaterielPage,
     InventairePage,
-    ProfilPage
+    ProfilPage,
+    LoginPage
 
   ],
   imports: [
@@ -58,18 +59,13 @@ export const firebaseConfig = {
     HomePage,
     MaterielPage,
     InventairePage,
-    ProfilPage
+    ProfilPage,
+    LoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider,
-    UserProvider,
-    CsProvider,
-    SdisProvider,
-    MaterielProvider,
-    InventaireProvider
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {

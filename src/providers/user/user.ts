@@ -29,7 +29,7 @@ export class UserProvider {
     this.user = this.userDoc.valueChanges();
     this.user.subscribe(css => {
         this.currentUser = css;
-        console.log(css);
+        //console.log(css);
         var csPromises = [];
         for (let entry of css.cs) {
 

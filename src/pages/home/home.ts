@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, App } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import {
   AngularFirestore,
@@ -11,6 +11,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 import {CsProvider} from "../../providers/cs/cs";
 import * as _ from 'lodash';
 import {MaterielProvider} from "../../providers/materiel/materiel";
+import {CS} from "../../models/user.interface";
+import {Inventaire} from "../../models/user.interface";
 
 @Component({
   selector: 'HomePage',
@@ -18,55 +20,46 @@ import {MaterielProvider} from "../../providers/materiel/materiel";
 })
 export class HomePage {
 
-  constructor(public csProvider:CsProvider, public materielProvider:MaterielProvider, private auth: AuthProvider, public alertCtrl: AlertController) {
+  constructor(public csProvider:CsProvider, public materielProvider:MaterielProvider, private auth: AuthProvider, public alertCtrl: AlertController, private _app: App) {
 
-
+  }
+  private cs:Observable<CS>;
+  private inventaires: Observable<Inventaire[]>;
+  private title: string;
+  ionViewDidLoad() {
+    /*this.csProvider.getCSDoc().then(c => {
+      //this.setTitle(c);
+      console.log(c);
+    });*/
+    //this.inventaires = this.csProvider.csDoc.collection<Inventaire>('inventaires').valueChanges();
+    if(this.csProvider.csDoc){
+      this.csProvider.csDoc.valueChanges().subscribe(c => {
+        this.setTitle(c.nom);
+      });
+      this.inventaires = this.csProvider.csDoc.collection<Inventaire>('inventaires').valueChanges();
+    }
   }
   public inventaire = null;
   public vehicule = null;
   public needToSave = false;
   public addJob(inventaire){
-
-    /*const jobObserver = this.csProvider.getLastJob(inventaire.id).subscribe(jobs =>{
-      jobObserver.unsubscribe();
-      if(jobs.length > 0){
-        let confirm = this.alertCtrl.create({
-          title: 'Inventaire en cours',
-          message: 'Un inventaire est en cours, voulez vous le reprendre ?',
-          buttons: [
-            {
-              text: 'Non',
-              handler: () => {
-                this.newJob(inventaire);
-              }
-            },
-            {
-              text: 'Oui',
-              handler: () => {
-                this.inventaire = jobs[0];
-              }
-            }
-          ]
-        });
-        confirm.present();
-      }else{
-        this.newJob(inventaire);
-      }
-    });*/
     this.newJob(inventaire);
   }
 
   public selectInventaire(inventaire){
     this.newJob(inventaire);
+    this.setTitle(inventaire.l);
   }
 
   public selectVehicule(vehicule){
     this.vehicule = vehicule;
+    this.setTitle(vehicule.l);
   }
 
   private newJob(inventaire){
     this.inventaire = {
       i: inventaire.id,
+      l:inventaire.l,
       c:false,
       j: []
     };
@@ -95,7 +88,6 @@ export class HomePage {
   }
 
   public isVehiculeDone(vehicule){
-    console.log(vehicule);
     return 'done';
   }
 
@@ -109,10 +101,17 @@ export class HomePage {
     this.needToSave = false;
   }
 
+  private setTitle(title:string){
+    this.title = title;
+    this._app.setTitle(this.title);
+  }
+
   public cancelInventaire(){
     if(!this.needToSave){
       this.vehicule = null;
       this.needToSave = false;
+
+      this.setTitle(this.inventaire.l);
     }else{
       let confirm = this.alertCtrl.create({
         title: 'Inventaire en cours',
@@ -122,6 +121,7 @@ export class HomePage {
             text: 'Non',
             handler: () => {
               this.vehicule = null;
+              this.setTitle(this.inventaire.l);
             }
           },
           {

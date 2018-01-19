@@ -15,9 +15,22 @@ import {UserProvider} from '../providers/user/user';
 import {User} from '../models/user.interface';
 import {Observable} from "rxjs";
 import {CS} from "../models/user.interface";
+import {CsProvider} from "../providers/cs/cs";
+import {AuthProvider} from "../providers/auth/auth";
+import {SdisProvider} from "../providers/sdis/sdis";
+import {MaterielProvider} from "../providers/materiel/materiel";
+import {InventaireProvider} from "../providers/inventaire/inventaire";
+import {LoginPage} from "../pages/login/login";
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [ CsProvider,
+    AuthProvider,
+    UserProvider,
+    SdisProvider,
+    MaterielProvider,
+    InventaireProvider
+  ]
 })
 export class MyApp {
 
@@ -26,11 +39,8 @@ export class MyApp {
 
   pages:Array<{title: string, component: any}>;
 
-
-  private item:Observable<User>;
-
   constructor(public platform:Platform, public statusBar:StatusBar, public splashScreen:SplashScreen,
-              afAuth:AngularFireAuth, public userProvider:UserProvider) {
+              afAuth:AngularFireAuth) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -45,13 +55,11 @@ export class MyApp {
 
       if (user) {
 
-          this.rootPage = 'LoginPage';
+          this.rootPage = LoginPage;
           authObserver.unsubscribe();
 
-
-
       } else {
-        this.rootPage = 'LoginPage';
+        this.rootPage = LoginPage;
         authObserver.unsubscribe();
       }
     });

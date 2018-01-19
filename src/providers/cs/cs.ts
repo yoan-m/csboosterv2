@@ -19,7 +19,7 @@ export class CsProvider {
 
 
   public csDoc: AngularFirestoreDocument<CS>;
-  public cs:Observable<CS>;
+  //public cs:Observable<CS>;
   public csId:string;
 
   public materielsCollection: AngularFirestoreCollection<Materiel>;
@@ -28,34 +28,37 @@ export class CsProvider {
 
   public jobsCollection: AngularFirestoreCollection<Job>;
 
-  public materiels: Observable<Materiel[]>;
-  public inventaires: Observable<Inventaire[]>;
+  //public materiels: Observable<Materiel[]>;
+  //public inventaires: Observable<Inventaire[]>;
 
   public materielsData: {};
 
   constructor(private afs: AngularFirestore, public toastCtrl: ToastController) {
+    console.log('test');
   }
 
-
-  getCS(csId: string):Observable<CS> {
+  public getCSDoc(): AngularFirestoreDocument<CS>{
+    return this.csDoc;
+  }
+  getCS(csId: string):AngularFirestoreDocument<CS> {
     this.csDoc = this.afs.doc<CS>('cs/' + csId);
-    this.cs = this.csDoc.valueChanges();
+    //this.cs = this.csDoc.valueChanges();
     this.materielsData = {};
     this.materielsCollection = this.csDoc.collection<Materiel>('materiels');
     this.storagesCollection = this.csDoc.collection<Storage>('storages');
     this.inventairesCollection = this.csDoc.collection<Inventaire>('inventaires');
     this.jobsCollection = this.csDoc.collection<Job>('jobs');
-    this.materiels = this.materielsCollection.valueChanges();
-    this.inventaires = this.inventairesCollection.valueChanges();
+    //this.materiels = this.materielsCollection.valueChanges();
+    //this.inventaires = this.inventairesCollection.valueChanges();
 
-    this.materiels.subscribe(mats => {
-      console.log(mats);
+    this.materielsCollection.valueChanges().subscribe(mats => {
+      //console.log(mats);
       for(let mat of mats){
         this.materielsData[mat.id]=mat;
       }
       return mats;
     });
-    return this.cs;
+    return this.csDoc;
   }
 
   public addInventaire(inventaire: Inventaire){
